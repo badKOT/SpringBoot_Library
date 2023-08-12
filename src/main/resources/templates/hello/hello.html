@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Привет</title>
+</head>
+<body>
+Привет!
+<br>
+<a href="/books"><button>Все книги</button></a>
+<br>
+<form th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="Выйти">
+</form>
+</body>
+</html>
