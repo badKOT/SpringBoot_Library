@@ -14,14 +14,6 @@ public class HelloController {
         return "hello/hello";
     }
 
-    @GetMapping("/showUserInfo")
-    public String userInfo() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) auth.getPrincipal();
-        System.out.println(personDetails.getPerson());
-        return "hello/hello";
-    }
-
     @GetMapping("/admin")
     public String adminPage() {
         return "hello/admin";
