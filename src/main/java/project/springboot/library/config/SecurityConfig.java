@@ -30,8 +30,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin", "/people", "/books/new",
-                                "/people/**", "/books/{id}/edit", "/books/{id}/delete")
+                        .requestMatchers("/auth/admin", "/admin/**")
                         .hasRole("ADMIN")
                         .requestMatchers("/auth/login", "/auth/new", "/auth/error")
                         .permitAll()
@@ -41,7 +40,7 @@ public class SecurityConfig {
                 .formLogin(login -> login
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/process_login")
-                        .defaultSuccessUrl("/hello", true)
+                        .defaultSuccessUrl("/auth/hello", true)
                         .failureUrl("/auth/login?error"))
                 .httpBasic(withDefaults())
 //                .authenticationProvider(AuthProviderImpl)

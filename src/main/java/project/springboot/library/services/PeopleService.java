@@ -44,6 +44,9 @@ public class PeopleService implements UserDetailsService {
     @Transactional
     public void update(int id, Person newPerson) {
         newPerson.setId(id);
+        Optional<Person> oldPerson = rep.findById(id);
+        newPerson.setPassword(oldPerson.get().getPassword());
+        newPerson.setRole(oldPerson.get().getRole());
         rep.save(newPerson);
     }
 

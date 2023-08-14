@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,14 +14,14 @@ import project.springboot.library.services.BooksService;
 import project.springboot.library.services.PeopleService;
 
 @Controller
-@RequestMapping("/books")
-public class BooksController {
+@RequestMapping("/admin/books")
+public class AdminBooksController {
 
     private final PeopleService peopleService;
     private final BooksService booksService;
 
     @Autowired
-    public BooksController(PeopleService peopleService, BooksService booksService) {
+    public AdminBooksController(PeopleService peopleService, BooksService booksService) {
         this.peopleService = peopleService;
         this.booksService = booksService;
     }
@@ -38,15 +37,68 @@ public class BooksController {
                 booksPerPage == null ? 25 : booksPerPage,
                 Sort.by("year"));
         model.addAttribute("books", booksService.findAll(pagination));
-        return "books/index";
+        return "admin/books/books";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         Book book = booksService.findOne(id);
         model.addAttribute("book", book);
+        model.addAttribute("people", peopleService.findAll());
         model.addAttribute("owner", book.getOwner());
-        return "books/show";
+        return "admin/books/info";
+    }
+
+    @GetMapping("/new")
+    public String newBook(@ModelAttribute("book") Book book) {
+        return "admin/books/new";
+    }
+
+    @PostMapping()
+    public String create(@ModelAttribute("book") @Valid Book book,
+                         BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors())
+            return "admin/books/new";
+
+        booksService.save(book);
+        return "redirect:/admin/books";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String edit(Model model, @PathVariable("id") int id) {
+        model.addAttribute("book", booksService.findOne(id));
+        return "admin/books/edit";
+    }
+
+    @PatchMapping("/{id}")
+    public String update(@ModelAttribute("book") @Valid Book book,
+                         BindingResult bindingResult,
+                         @PathVariable("id") int id) {
+        if (bindingResult.hasErrors())
+            return "admin/books/edit";
+
+        booksService.update(id, book);
+        return "redirect:/admin/books";
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public String delete(@PathVariable("id") int id) {
+        booksService.delete(id);
+        return "redirect:/admin/books";
+    }
+
+    @PatchMapping("/{id}/take")
+    public String takeBook(@PathVariable("id") int id,
+                           @RequestParam("personId") int person_id) {
+        booksService.takeTheBook(id, person_id);
+        return "redirect:/admin/books/" + id;
+    }
+
+    @PatchMapping("/{id}/return")
+    public String returnBook(@PathVariable("id") int id) {
+        booksService.returnBook(id);
+        return "redirect:/admin/books/" + id;
     }
 
     @GetMapping("/search")

@@ -16,20 +16,20 @@
     <p><b>Книги:</b></p>
     <div th:each="book : ${books}">
         <a th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}"
-            th:href="@{/books/{id}(id=${book.getId()})}"
-            th:style="${book.isExpired()} ? 'color:red' : 'color:black'"></a>
+           th:href="@{/admin/books/{id}(id=${book.getId()})}"
+           th:style="${book.isExpired()} ? 'color:red' : 'color:black'"></a>
     </div>
 </div>
 
 <br><hr>
-<a th:href="@{/people/{id}/edit(id=${person.getId()})}"><button>Редактировать</button></a>
+<a th:href="@{/admin/people/{id}/edit(id=${person.getId()})}"><button>Редактировать</button></a>
 
-<form th:method="DELETE" th:action="@{/people/{id}/delete(id=${person.getId()})}">
+<form th:method="DELETE" th:action="@{/admin/people/{id}/delete(id=${person.getId()})}">
     <input type="submit" value="Удалить">
 </form>
 
 <br>
-<a href="/people"><button>Все люди</button></a>
+<a href="/admin/people"><button>Все люди</button></a>
 
 </body>
 </html>
