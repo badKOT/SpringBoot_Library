@@ -1,38 +1,27 @@
 package project.springboot.library.controllers;
 
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.access.annotation.Secured;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import project.springboot.library.dto.AddBookRqDto;
 import project.springboot.library.models.Book;
 import project.springboot.library.services.BooksService;
-import project.springboot.library.services.PeopleService;
 
 @Controller
 @RequestMapping("/books")
+@RequiredArgsConstructor
+@Slf4j
 public class BooksController {
 
-    private final PeopleService peopleService;
     private final BooksService booksService;
-
-    @Autowired
-    public BooksController(PeopleService peopleService, BooksService booksService) {
-        this.peopleService = peopleService;
-        this.booksService = booksService;
-    }
 
     @GetMapping()
     public String index(Model model, @ModelAttribute("books") Book book,
-                        @RequestParam(value = "page", required = false)
-                        Integer page,
-                        @RequestParam(value = "booksPerPage", required = false)
-                        Integer booksPerPage) {
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "booksPerPage", required = false) Integer booksPerPage) {
 
         Pageable pagination = PageRequest.of(page == null ? 0 : page,
                 booksPerPage == null ? 25 : booksPerPage,
@@ -58,5 +47,14 @@ public class BooksController {
     public String search(Model model, @RequestParam("title") String title) {
         model.addAttribute("books", booksService.searchByTitle(title));
         return "books/search";
+    }
+
+    @ResponseBody
+    @PostMapping("/add")
+    public Boolean addBook(@RequestBody AddBookRqDto dto) {
+        log.info("got request to save book:" + dto);
+        booksService.save(dto.personId(), dto.title(), dto.author(), dto.year());
+        log.info("request processing finished");
+        return true;
     }
 }

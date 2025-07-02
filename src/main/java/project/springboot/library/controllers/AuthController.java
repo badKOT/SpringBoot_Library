@@ -17,8 +17,8 @@ import project.springboot.library.util.PeopleValidator;
 import java.security.Principal;
 import java.util.Objects;
 
-@Controller
-@RequestMapping("/auth")
+//@Controller
+//@RequestMapping("/auth")
 public class AuthController {
 
     private final PeopleValidator peopleValidator;
