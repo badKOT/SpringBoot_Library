@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.springboot.library.dto.AddPersonRqDto;
-import project.springboot.library.dto.UpdatePersonRqDto;
+import project.springboot.library.dto.*;
 import project.springboot.library.models.Person;
 import project.springboot.library.security.PersonDetails;
 import project.springboot.library.services.PeopleService;
@@ -44,5 +43,15 @@ public class PeopleController {
     @ResponseBody
     public int updatePerson(@RequestBody UpdatePersonRqDto dto) {
         return peopleService.update(dto);
+    }
+
+    @PostMapping("/getRecord")
+    @ResponseBody
+    public PersonRecord getPersonRecord(@RequestParam Integer id) {
+        if (id != null) {
+            return peopleService.getRecordById(id);
+        } else {
+            return null;
+        }
     }
 }

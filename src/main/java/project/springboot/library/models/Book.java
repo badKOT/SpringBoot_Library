@@ -3,6 +3,7 @@ package project.springboot.library.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -15,7 +16,7 @@ public class Book {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "title")
     private String title;
@@ -24,7 +25,13 @@ public class Book {
     private String author;
 
     @Column(name = "year")
-    private int year;
+    private Integer year;
+
+    @Column(name = "pages")
+    private Integer pages;
+
+    @Column(name = "price")
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
@@ -36,7 +43,7 @@ public class Book {
     private Date takenAt;
 
     @Transient
-    private boolean expired;
+    private Boolean expired;
 
     public Book(String title, String author, int year) {
         this.title = title;

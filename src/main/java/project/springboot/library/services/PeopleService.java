@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.springboot.library.dto.PersonRecord;
 import project.springboot.library.dto.UpdatePersonRqDto;
 import project.springboot.library.models.Book;
 import project.springboot.library.models.Person;
@@ -39,7 +40,8 @@ public class PeopleService implements UserDetailsService {
 
     @Transactional
     public int update(UpdatePersonRqDto dto) {
-        var person = rep.findById(dto.id()).orElseThrow(() -> new RuntimeException("Person with id " + dto.id() + " not found"));
+        var person = rep.findById(dto.id())
+                .orElseThrow(() -> new RuntimeException("Person with id " + dto.id() + " not found"));
         Optional.ofNullable(dto.name()).ifPresent(name -> person.setName(name));
         Optional.ofNullable(dto.password()).ifPresent(pw -> person.setPassword(pw));
         Optional.ofNullable(dto.role()).ifPresent(role -> person.setRole(role));
@@ -78,6 +80,10 @@ public class PeopleService implements UserDetailsService {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    public PersonRecord getRecordById(Integer id) {
+        return rep.findPersonRecordById(id).orElse(null);
     }
 
     @Override

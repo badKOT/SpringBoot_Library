@@ -12,8 +12,8 @@ import project.springboot.library.services.PeopleService;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@EnableWebSecurity
-@Configuration
+//@EnableWebSecurity
+//@Configuration
 public class SecurityConfig {
 
     private final PeopleService peopleService;

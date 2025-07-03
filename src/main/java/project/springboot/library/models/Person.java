@@ -15,17 +15,13 @@ public class Person {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "year")
-    private int year;
-
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
-    @ToString.Exclude
-    private List<Book> books;
+    private Integer year;
 
     @Column(name = "password")
     private String password;
@@ -34,7 +30,11 @@ public class Person {
     private String role;
 
     @Version
-    private int version;
+    private Integer version;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
+    @ToString.Exclude
+    private List<Book> books;
 
     public Person(String name, int year) {
         this.name = name;
